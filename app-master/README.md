@@ -1,3 +1,8 @@
 <h2>
-文档已移至 <a href="https://uniapp.dcloud.io/uniCloud/uni-starter.html" target="_blank">uni-starter文档</a>
+# Intervention Miniapp
+
+A lightweight intervention mini-application designed to support digital health / behavioral intervention workflows.  
+This project provides modular components for user interaction, data capture, and intervention delivery.
+
+
 </h2>
