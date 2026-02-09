@@ -1,8 +1,19 @@
-<h2>
-# Intervention Miniapp
+<h1 align="center"> Intervention Miniapp</h1>
 
-A lightweight intervention mini-application designed to support digital health / behavioral intervention workflows.  
-This project provides modular components for user interaction, data capture, and intervention delivery.
+<p align="center">
+  A lightweight mini-application for digital health & behavioral intervention workflows.
+</p>
 
+<p align="center">
+ Scalable · Intervention-Ready
+</p>
 
-</h2>
+---
+
+## Overview
+
+Intervention Miniapp is designed to support structured intervention programs through an intuitive digital interface.  
+It enables user engagement, data capture, and intervention delivery in a streamlined workflow.
+
+---
+
