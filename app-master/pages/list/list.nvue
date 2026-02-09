@@ -1,0 +1,477 @@
+<template>
+	<view class="pages" v-if="quan == 1">
+		
+		<!-- 循环渲染视频 -->
+		<!-- <view v-for="item in videoList" style="width: 90%;height: 350rpx;margin-top: 40rpx;margin-left: 40rpx;">
+			<view style="text-align: center;font-size: 35rpx;margin-bottom: 20rpx;">{{item.title}}</view>
+			<video
+			    id="myVideo"   
+			    :src="item.url"   
+			    controls   
+			    autoplay="false"
+				
+			    style="width: 100%; height: 300rpx;" >
+			</video>
+		</view> -->
+		
+		   
+		   
+		<!-- #ifndef H5 -->
+		<statusBar></statusBar>
+		<!-- #endif -->
+
+		<!-- 搜索功能 -->
+		<!-- <view class="uni-search-box">
+			<uni-search-bar v-model="keyword" ref="searchBar" radius="100" cancelButton="none" disabled
+				:placeholder="inputPlaceholder" />
+			<view class="cover-search-bar" @click="searchClick"></view>
+		</view> -->
+
+		<unicloud-db ref='udb' v-slot:default="{data,pagination,hasMore, loading, error, options}" @error="onqueryerror"
+			:collection="colList" :page-size="10"
+			v-if="videobool == 1" >
+			<!-- 基于 uni-list 的页面布局 field="user_id.nickname"-->
+			<uni-list class="uni-list" :border="false" :style="{height:listHight}">
+				
+				<!-- 作用于app端nvue页面的下拉加载 -->
+				<!-- #ifdef APP-NVUE -->
+				<refreshBox @refresh="refresh" :loading="loading"></refreshBox>
+				<!-- #endif -->
+
+				<!-- 列表渲染 -->
+				<uni-list-item :to="'/pages/list/detail?id='+item._id+'&title='+item.title" v-for="(item,index) in videoList" :key="index">
+					<!-- 通过header插槽定义列表左侧图片 -->
+					<template v-slot:header>
+						<image class="avatar" :src="item.cover.url" mode="aspectFill"></image>
+					</template>
+					<!-- 通过body插槽定义布局 -->
+					<template v-slot:body>
+						<view class="main">
+							<text class="title">{{item.title}}</text>
+							<view class="info">
+								<!-- <text class="author">{{item.user_id[0]?item.user_id[0].nickname:''}}</text> -->
+								<uni-dateformat class="last_modify_date" :date="item._creatTime"
+									format="yyyy-MM-dd" :threshold="[60000, 2592000000]" />
+									<text class="last_modify_date" v-if="item.number == 0" style="text-align: right;">暂未观看</text>
+									 <text class="last_modify_date" v-if="item.number > 0 && item.number<item.count">	 已完成{{item.percentage}}</text>
+									 <text class="last_modify_date" v-if="item.number == item.count">	 已完成观看</text>
+									 
+							</view>
+						</view>
+					</template>
+					
+					
+				</uni-list-item>
+				<!-- 加载状态：上拉加载更多，加载中，没有更多数据了，加载错误 -->
+				<!-- #ifdef APP-PLUS -->
+				<uni-list-item>
+					<template v-slot:body>
+				<!-- #endif -->
+						<uni-load-state @networkResume="refresh" :state="{data,pagination,hasMore, loading, error}"
+							@loadMore="loadMore">
+						</uni-load-state>
+				<!-- #ifdef APP-PLUS -->
+					</template>
+				</uni-list-item>
+				<!-- #endif -->
+			</uni-list>
+		</unicloud-db>
+		
+		
+		<view v-if="videobool == 2" class="news" >
+			<view class="newstitle">新闻咨询</view>
+			<view class="newslist" v-for="(item,index) in newslist" @click="fns(item.id)">
+				<view class="t">
+					{{item.title}}
+				</view>
+				<view class="t1">
+					{{item.create_date}}
+				</view>
+			</view>
+		</view>
+		
+	</view>
+</template>
+
+<script>
+	let cdbRef;
+	import statusBar from "@/uni_modules/uni-nav-bar/components/uni-nav-bar/uni-status-bar";
+
+	const db = uniCloud.database();
+
+	export default {
+	
+		onLoad(){
+			this.videoOff()
+			this.score = uni.getStorageSync('score')
+			console.log('分数：' + this.score)
+			 // this.addList(this.score)
+			  this.newlist()
+		},
+		onShow() {
+			console.log("onshowList");
+			this.getNewVideoList()
+		},
+		components: {
+			statusBar
+		},
+		computed: {
+			inputPlaceholder(e) {
+				if (uni.getStorageSync('CURRENT_LANG') == "en") {
+					return 'Please enter the search content'
+				} else {
+					return '请输入搜索内容'
+				}
+			},
+			colList(){
+				return [
+					db.collection('opendb-news-articles').where(this.where).field('avatar,title,last_modify_date,user_id').getTemp(),
+					db.collection('uni-id-users').field('_id,nickname').getTemp()
+				]
+			}
+			
+		},
+		data() {
+			return {
+				newslist:[],
+				quan:0,
+				videobool:2,
+				score: 0,
+				where: '"article_status" == 1',
+				keyword: "",
+				showRefresh: false,
+				listHight: 0,
+				videoList: [
+					// {id:"1",title:"这是一个非常好看的视频1",url:'https://mp-e7b99023-466a-4519-a5bc-022cc9ccf9d2.cdn.bspapp.com/cloudstorage/测试视频.mp4'},
+					// {id:"2",title:"这是一个非常好看的视频2",url:'https://mp-e7b99023-466a-4519-a5bc-022cc9ccf9d2.cdn.bspapp.com/cloudstorage/a346bfb3-e973-4371-ad69-7b3d24031190.mp4'},
+					
+		
+				],
+				
+			}
+		},
+		watch: {
+			keyword(keyword, oldValue) {
+				let where = '"article_status" == 1 '
+				if (keyword) {
+					this.where = where + `&& /${keyword}/.test(title)`;
+				} else {
+					this.where = where;
+				}
+			}
+		},
+		async onReady() {
+			// #ifdef APP-NVUE
+			/* 可用窗口高度 - 搜索框高 - 状态栏高 */
+			this.listHight = uni.getSystemInfoSync().windowHeight - uni.getSystemInfoSync().statusBarHeight - 50 + 'px';
+			// #endif
+			// #ifndef APP-NVUE
+			this.listHight = 'auto'
+			// #endif
+			cdbRef = this.$refs.udb
+		},
+		
+		methods: {
+			fns(id){
+				uni.navigateTo({
+					url:"/pages/list/detail?new="+id
+				})
+			},
+			newlist(){
+				uni.request({
+					url:"https://www.hhkstlyq.com/api/index/news?type=tzgg&page=1&pagesize=10"
+				}).then(res=>{
+					this.newslist = res.data.data.data
+				})
+			},
+			videoOff(){
+				uni.request({
+					url:"https://fc-mp-f02adfe0-c2b7-4979-95b9-97f95913e417.next.bspapp.com/banner/videoOff"
+				}).then(res=>{
+					this.videobool = res.data
+					this.quan = 1
+				})
+			},
+			
+			//调用
+			sendPushMessage(){
+				let userInfo = uni.getStorageSync('uni-id-pages-userInfo')
+				let userId = userInfo._id
+				console.log(userId)
+				uni.request({
+					url:"https://fc-mp-f02adfe0-c2b7-4979-95b9-97f95913e417.next.bspapp.com/banner/pushMessage",
+					method: 'POST',
+					data:{'uid':userId},
+				}).then(res=>{})
+			},
+			//获取所有的视频列表
+			getAllVideo(){
+				let userInfo = uni.getStorageSync('uni-id-pages-userInfo')
+				let userId = userInfo._id
+				console.log(userId)
+				uni.request({
+				 	url: 'https://fc-mp-f02adfe0-c2b7-4979-95b9-97f95913e417.next.bspapp.com/push/getSurveysId',
+				 	method: 'POST',
+				 	data:{'uid':userId},
+				 	success: (res) => {
+						console.log('111',res)
+						if(res.data != ''){
+							uni.request({
+								url: 'https://fc-mp-f02adfe0-c2b7-4979-95b9-97f95913e417.next.bspapp.com/push/getAllVideoList',
+								method: 'GET',
+								data:{'uid':userId,'category_id':res.data},
+								success: (res) => {
+									
+									//做个数据处理,将数据中包含start_score的数据过滤出去
+									let videoList = res.data.data
+									let arr = []
+									videoList.forEach((item) => {
+										if(!item.start_score){
+											arr.push(item)
+										}
+										if(item.number != 0){
+											var bai = (item.number/item.count)*100;
+											if(bai < 95){
+												//则推送
+											}
+										}else{
+											//则推送
+										}
+										 
+										// console.log(item)
+									})
+									// 创建一个新的数组来存储修改后的对象 
+									
+									const newData = arr.map(item => {  
+									    // 创建一个新的对象，包含我们想要的属性  
+									    const newItem = {  
+									        ...item, // 复制原始对象的所有属性（不包括videofile中的url）  
+									        url: item.videofile.url, // 将videofile中的url属性提升到最外层  
+									    };  
+									      
+									    // delete newItem.videofile.url;  
+									    // 如果想要完全删除videofile对象，可以这样做：  
+									    delete newItem.videofile;  
+									  
+									    return newItem;  
+									});  
+							 
+									// console.log('无规则推送视频列表：' + JSON.stringify(newData))
+									this.videoList = []
+									this.videoList.unshift(...newData)
+									// console.log('所有视频列表：' + JSON.stringify(this.videoList))
+									
+								}
+							})
+						}
+					},
+				})
+				 
+			},
+			//post获取最新规则的视频列表
+			getNewVideoList(){
+				//取出用户id
+				let userInfo = uni.getStorageSync('uni-id-pages-userInfo')
+				let userId = userInfo._id
+				uni.request({
+					url: 'https://fc-mp-f02adfe0-c2b7-4979-95b9-97f95913e417.next.bspapp.com/video/getUserVideoList',
+					method: 'GET',
+					data: {userId:userId} ,
+					success: (res) => {
+						 console.log('datsssssssssa',res)
+						const arr = res.data.data
+						// console.log('规则推送视频列表：' + JSON.stringify(arr))
+						//加个判断，如果有数据就添加到视频列表中
+						if(arr.length == 0){
+							return
+						}
+						// 创建一个新的数组来存储修改后的对象
+						const newData = arr.map(item => {  
+						    // 创建一个新的对象，包含我们想要的属性  
+						    const newItem = {  
+						        ...item, // 复制原始对象的所有属性（不包括videofile中的url）  
+						        url: item.videofile.url, // 将videofile中的url属性提升到最外层  
+						    };  
+						      
+						    // delete newItem.videofile.url;  
+						    // 如果想要完全删除videofile对象，可以这样做：  
+						    delete newItem.videofile;  
+						  
+						    return newItem;  
+						});  
+						console.log('newdata',newData)
+						// console.log('规则推送视频列表：' + JSON.stringify(newData))
+						 
+						// this.videoList.unshift(newData[0])
+						this.videoList = newData
+						
+						// console.log('videoList',this.videoList)
+						// console.log('视频列表：' + JSON.stringify(this.videoList))
+					}
+				})
+			},
+			
+			
+			// 视频播放事件
+			videoPlay() {  
+			    console.log('视频开始播放');  
+			},  
+			videoPause() {  
+				console.log('视频暂停播放');  
+			},  
+			videoEnded() {  
+				console.log('视频播放完毕');  
+			},
+			//视频音量改变
+			videoVolumeChange(e) {
+				console.log('音量改变：' + e.detail.value)
+			},
+			
+				
+			
+			//获取本地存储的分数
+			getScore(){
+				this.score = uni.getStorageSync('score')
+				console.log('分数：' + this.score)
+				this.addList(this.score)
+				
+			},
+			
+			
+			
+			searchClick(e) { //点击搜索框
+				uni.hideKeyboard();
+				uni.navigateTo({
+					url: '/pages/list/search/search',
+					animationType: 'fade-in'
+				});
+			},
+			
+			
+			retry() {
+				this.refresh()
+			},
+			refresh() {
+				cdbRef.loadData({
+					clear: true
+				}, () => {
+					uni.stopPullDownRefresh()
+					// #ifdef APP-NVUE
+					this.showRefresh = false
+					// #endif
+					console.log('end');
+				})
+				console.log('refresh');
+			},
+			loadMore() {
+				// cdbRef.loadMore()
+			},
+			onqueryerror(e) {
+				console.error(e);
+			},
+			onpullingdown(e) {
+				console.log(e);
+				this.showRefresh = true
+				if(e.pullingDistance>100){
+					this.refresh()
+				}
+			}
+		},
+		// #ifndef APP-NVUE
+		onPullDownRefresh() {
+			this.refresh()
+		},
+		onReachBottom() {
+			this.loadMore()
+		}
+		// #endif
+	}
+</script>
+
+<style scoped>
+	.news{
+		width: 80%;
+		margin: 0 auto;
+	}
+	.newstitle{
+		text-align: center;
+		font-size: 50rpx;
+	}
+	.newslist{
+		border: 5rpx solid #e7e7e7;
+		border-radius: 30rpx;
+		width: 100%;
+		height: 200rpx;
+		margin-top: 30rpx;
+		font-size: 28rpx;
+	}
+	.t{
+		padding: 30rpx;
+	}
+	.t1{
+		padding: 30rpx;
+		text-align:right;
+	}
+	/* #ifndef APP-NVUE */
+	view {
+		display: flex;
+		box-sizing: border-box;
+		flex-direction: column;
+	}
+	/* #endif */
+	.pages {
+		background-color: #FFFFFF;
+		padding-top: 60rpx;
+	}
+
+	.avatar {
+		width: 200rpx;
+		height: 200rpx;
+		margin-right: 10rpx;
+	}
+
+	.main {
+		justify-content: space-between;
+		flex: 1;
+	}
+
+	.title {
+		font-size: 16px;
+	}
+
+	.info {
+		flex-direction: row;
+		justify-content: space-between;
+	 
+	}
+
+	.author,
+	.last_modify_date {
+		font-size: 14px;
+		color: #999999;
+	}
+
+	.uni-search-box {
+		background-color: #FFFFFF;
+		position: sticky;
+		height: 50px;
+		top: 0;
+		left: 0;
+		/* #ifndef APP-PLUS */
+		z-index: 9;
+		/* #endif */
+		/* #ifdef MP-WEIXIN */
+		width: 580rpx;
+		/* #endif */
+	}
+	.cover-search-bar {
+		height: 50px;
+		position: relative;
+		top: -50px;
+		margin-bottom: -50px;
+		/* #ifndef APP-NVUE */
+		z-index: 999;
+		/* #endif */
+	}
+	 
+</style>

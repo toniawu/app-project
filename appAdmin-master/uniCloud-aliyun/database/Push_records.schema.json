@@ -1,0 +1,61 @@
+// 推送记录模块
+
+{
+	"bsonType": "object",
+	"required": [],
+	"permission": {
+		"read": true,
+		"create": true,
+		"update": true,
+		"delete": true
+	},
+	"properties": {
+		"_id": {
+			"description": "ID，系统自动生成"
+		},
+		
+		"num":{
+			"title": "推送次数",
+			"bsonType": "int",
+			"defaultValue":0
+			
+		},
+		
+		"users":{
+			"title": "推送用户",
+			"bsonType": "array",
+			"items": {
+				"bsonType": "string"
+			}
+			
+		},
+		"user_id":{
+			"title": "用户编号",
+			"bsonType": "string"
+			
+		},
+		"watch_state":{
+			"title": "是否观看 0 否 1是",
+			"bsonType": "int"
+			
+		},
+		"video_id":{
+			"title": "视频ID",
+			"bsonType": "string"
+			
+		},
+			
+		"push_time":{
+			"title": "推送时间",
+			"bsonType": "timestamp"
+		},
+		
+		"_creatTime":{
+			"title": "创建时间",
+			"bsonType": "timestamp",
+			"forceDefaultValue":{
+				"$env": "now"
+			}
+		}
+	}
+}

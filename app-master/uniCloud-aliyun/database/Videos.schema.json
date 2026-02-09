@@ -1,0 +1,64 @@
+// 视频模块
+
+{
+	"bsonType": "object",
+	"required": ["title","desc","num","videofile","cover","category_id"],
+	"permission": {
+		"read": true,
+		"create": false,
+		"update": false,
+		"delete": false
+	},
+	"properties": {
+		"_id": {
+			"description": "ID，系统自动生成"
+		},
+		"num":{
+			"title": "视频编号",
+			"bsonType": "int"
+		},
+			
+		"title": {
+			"title": "视频标题",
+			"bsonType": "string"
+		},
+		"desc": {
+			"title": "视频描述",
+			"bsonType": "string"
+		},
+		"cover": {
+			"title": "封面",
+			"bsonType": "file",
+			"fileMediaType": "image"
+		},
+		"videofile": {
+			  "bsonType": "file",
+			  "fileMediaType": "video",
+			  "title": "视频文件"
+			  
+			  
+		}, 
+    	"category_id":{
+			"title": "分类",
+			"bsonType": "string"
+		},
+		"start_score":{
+			"title": "起始分数",
+			"bsonType": "int"
+		},
+		"end_score":{
+			"title": "结束分数",
+			"bsonType": "int"
+		},
+		
+		"_creatTime":{
+			"title": "创建时间",
+			"bsonType": "timestamp",
+			"forceDefaultValue":{
+				"$env": "now"
+			}
+		}
+		
+		
+	}
+}

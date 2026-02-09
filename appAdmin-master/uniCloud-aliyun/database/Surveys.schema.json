@@ -1,0 +1,36 @@
+// 文档教程: https://uniapp.dcloud.net.cn/uniCloud/schema
+{
+	"bsonType": "object",
+	"required": ["title","description","num"],
+	"permission": {
+		"read": false,
+		"create": false,
+		"update": false,
+		"delete": false
+	},
+	"properties": {
+		"_id": {
+			"description": "ID，系统自动生成"
+		},
+		"num":{
+			"title": "序号",
+			"bsonType":"int"
+		},
+		"title": {
+			"title": "问卷标题",
+			"bsonType": "string"
+		},
+		"description": {
+			"title": "问卷描述",
+			"bsonType": "string"
+		},
+		"_creatTime":{
+			"title": "创建时间",
+			"bsonType": "timestamp",
+			"forceDefaultValue":{
+				"$env": "now"
+			}
+		}
+		
+	}
+}

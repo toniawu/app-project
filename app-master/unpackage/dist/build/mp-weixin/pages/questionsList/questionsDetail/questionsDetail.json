@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "问卷详情",
+  "enablePullDownRefresh": false,
+  "usingComponents": {
+    "liu-clean-time": "/uni_modules/liu-clean-time/components/liu-clean-time/liu-clean-time"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "name": "pushNewVideoJob",
+  "dependencies": {},
+  "extensions": {
+    "uni-cloud-jql": {}
+  }
+}

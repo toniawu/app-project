@@ -1,0 +1,61 @@
+{
+	"bsonType": "object",
+	"required": ["num", "title", "description", "category_id", "questions"],
+	"permission": {
+		"read": false,
+		"create": false,
+		"update": false,
+		"delete": false
+	},
+	"properties": {
+		"_id": {
+			"description": "存储文档 ID，系统自动生成"
+		},
+		"num": {
+			"title": "序号",
+			"bsonType": "int"
+		},
+		"title": {
+			"title": "问卷标题",
+			"bsonType": "string"
+		},
+		"description": {
+			"title": "问卷描述",
+			"bsonType": "string"
+		},
+		"category_id": {
+			"title": "分类编号",
+			"bsonType": "string",
+			"foreignKey": "Category._id"
+		},
+		"questions": {
+			"title": "题目",
+			"bsonType": "array",
+			"items": {
+				"bsonType": "object",
+				"properties": {
+					"question_id": {
+						"title": "题目id",
+						"bsonType": "string"
+					},
+					"question_num_type": {
+						"title": "选项显示格式",
+						"bsonType": "int"
+					},
+					"question_type": {
+						"title": "题目格式 0选择 1填空",
+						"bsonType": "int"
+					}
+				}
+			}
+		},
+		"_creatTime": {
+			"title": "创建时间",
+			"bsonType": "timestamp",
+			"forceDefaultValue": {
+				"$env": "now"
+			}
+		}
+	},
+	"version": "0.0.1"
+}

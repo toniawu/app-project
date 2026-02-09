@@ -1,0 +1,35 @@
+{
+	"bsonType": "object",
+	"required": ["op_type", "user_id", "op_status"],
+	"permission": {
+		"read": true,
+		"create": true,
+		"update": true,
+		"delete": false
+	},
+	"properties": {
+		"_id": {
+			"description": "存储文档 ID，系统自动生成"
+		},
+		"user_id": {
+			"title": "用户id",
+			"bsonType": "string"
+		},
+		"op_type": {
+			"title": "操作类型 1 我已了解",
+			"bsonType": "int"
+		},
+		"op_status": {
+			"title": "操作状态 0 否 1是",
+			"bsonType": "int"
+		},
+		"create_date": {
+			"bsonType": "timestamp",
+			"description": "创建时间",
+			"forceDefaultValue": {
+				"$env": "now"
+			}
+		}
+	},
+	"version": "0.0.1"
+}

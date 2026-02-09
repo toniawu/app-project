@@ -1,0 +1,94 @@
+// 推送规则
+{
+	"bsonType": "object",
+	"required": ["serial","videoNum","video_id","pushDate","pushWeek","survey_id"],
+	"permission": {
+		"read": true,
+		"create": false,
+		"update": false,
+		"delete": false
+	},
+	"properties": {
+		"_id": {
+			"description": "ID，系统自动生成"
+		},
+		"serial":{
+			"bsonType": "int",
+			"title": "序号"
+		},
+		"surveyNum":{
+			"title": "问卷序号",
+			"bsonType": "int"
+		},
+		
+		"survey_id":{
+			"title": "关联问卷",
+			"bsonType": "string",
+			"foreignKey": "questionnaire._id",
+			"enum": {
+			    "collection": "questionnaire",
+			    "field": "_id as value, title as text"
+			
+			}
+		},
+		"videoNum":{
+			"title": "视频序号",
+			"bsonType": "int"
+		},
+		
+		"video_id":{
+			"title": "关联视频",
+			"bsonType": "string",
+			"foreignKey": "Videos._id",
+			"enum": {
+			    "collection": "Videos",
+			    "field": "_id as value, title as text"
+			
+			}
+			
+		},
+		"questions":{
+			"title": "关联问题",
+			"bsonType": "array",
+			"items": {
+				"bsonType":"object",
+				"descrition":"问题项",
+				"qestionsTitle":{
+					"title": "问题标题",
+					"bsonType": "string"
+				},
+				"questionsID":{
+					"title": "问题ID",
+					"bsonType": "string"
+				}
+			}
+		},
+		"pushDate":{
+			"title": "推送日期",
+			"bsonType": "timestamp"
+		},
+		
+		"min_score":{
+			"title": "最低分数",
+			"bsonType": "int"
+		},
+		"max_score":{
+			"title": "最高分数",
+			"bsonType": "int"
+		},
+		"pushWeek":{
+			"title": "答题后第N周",
+			"bsonType": "int",
+			"enum": [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
+		},
+			
+		
+		"_creatTime":{
+			"title": "创建时间",
+			"bsonType": "timestamp",
+			"forceDefaultValue":{
+				"$env": "now"
+			}
+		}
+	}
+}

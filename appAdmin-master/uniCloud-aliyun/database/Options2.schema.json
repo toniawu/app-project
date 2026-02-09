@@ -1,0 +1,53 @@
+// 选项表
+{
+	"bsonType": "object",
+	"required": ["content","num","serial","state"],
+	"permission": {
+		"read": false,
+		"create": false,
+		"update": false,
+		"delete": false
+	},
+	"properties": {
+		"_id": {
+			"description": "ID，系统自动生成"
+		},
+		"surveys_id":{
+			"title": "问卷ID",
+			"bsonType": "string",
+			"foreignKey": "Surveys._id"
+		},
+		"question_id":{
+			"title": "所属问题ID",
+			"bsonType": "string",
+			"foreignKey": "Questions._id"
+		},
+		"num":{
+			"title": "选项编号",
+			"bsonType": "int"
+			
+		},
+		"serial":{
+			"title": "选项",
+			"bsonType": "string"
+		},
+		"content":{
+			"title": "选项内容",
+			"bsonType": "string"
+		},
+		"state":{
+			"title": "选项状态",
+			"bsonType": "int",
+			"enum": [0,1]
+		},
+		"_creatTime":{
+			"description": "创建时间",
+			"bsonType": "timestamp",
+			"forceDefaultValue":{
+				"$env": "now"
+			}
+		}
+		
+		
+	}
+}

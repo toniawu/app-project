@@ -1,0 +1,42 @@
+{
+	"bsonType": "object",
+	"required": [
+		"user_id",
+		"wen_id"
+	],
+	"properties": {
+		"_id": {
+			"description": "存储文档 ID，系统自动生成"
+		},
+		"user_id": {
+			"bsonType": "string",
+			"description": "用户id",
+			"trim": "both"
+		},
+		"wen_id": {
+			"bsonType": "string",
+			"description": "问卷序号",
+			"trim": "both"
+		},	
+		"status": {
+			"bsonType": "int",
+			"description": "是否可以用来生成下一个问卷 1是 0否",
+			"trim": "both"
+		},	
+		"next_id": {
+			"bsonType": "int",
+			"description": "下一个问卷序号",
+			"trim": "both"
+		},	
+		"next_time": {
+			"bsonType": "int",
+			"description": "触发时间",
+			"trim": "both"
+		},	
+		"create_date": {
+			"bsonType": "int",
+			"description": "创建时间"
+		}
+	},
+	"version": "0.0.1"
+}

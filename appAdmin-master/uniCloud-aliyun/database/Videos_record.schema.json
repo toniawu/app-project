@@ -1,0 +1,39 @@
+{
+	"bsonType": "object",
+	"required": [],
+	"permission": {
+		"read": true,
+		"create": true,
+		"update": true,
+		"delete": true
+	},
+	"properties": {
+		"_id": {
+			"description": "ID，系统自动生成"
+		},
+		"number": {
+			"title": "观看到的秒数",
+			"bsonType": "String"
+		},
+		"count": {
+			"title": "总时长",
+			"bsonType": "String"
+		},
+		"user_id": {
+			"title": "用户编号",
+			"bsonType": "String"
+		},
+		"videos_id": {
+			"title": "视频编号",
+			"bsonType": "String"
+		},
+		"percentage": {
+			"title": "百分比",
+			"bsonType": "String"
+		},
+		"percentage1": {
+			"title": "百分比",
+			"bsonType": "String"
+		}
+	}
+}

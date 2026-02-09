@@ -1,0 +1,7 @@
+{
+  "name": "pushMsg",
+  "dependencies": {},
+  "extensions": {
+    "uni-cloud-jql": {}
+  }
+}

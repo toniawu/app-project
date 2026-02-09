@@ -1,0 +1,1 @@
+<view class="page-main"><liu-clean-time class="vue-ref" bind:submit="__e" vue-id="0f45a074-1" data-ref="liuCleanTime" data-event-opts="{{[['^submit',[['submit']]]]}}" bind:__l="__l"></liu-clean-time></view>

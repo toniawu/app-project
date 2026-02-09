@@ -1,0 +1,28 @@
+{
+	"bsonType": "object",
+	"required": ["content", "state"],
+	"permission": {
+		"read": false,
+		"create": false,
+		"update": false,
+		"delete": false
+	},
+	"properties": {
+		"_id": {
+			"description": "存储文档 ID，系统自动生成"
+		},
+		"content": {
+			"title": "选项内容",
+			"bsonType": "string",
+			"description": "选项内容",
+			"trim": "both"
+		},
+		"state": {
+			"title": "选项状态",
+			"bsonType": "int",
+			"description": "选项状态",
+			"trim": "both"
+		}
+	},
+	"version": "0.0.1"
+}

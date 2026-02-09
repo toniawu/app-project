@@ -1,0 +1,1 @@
+{"bsonType":"object","required":["content","answer_type"],"permission":{"read":false,"create":false,"update":false,"delete":false},"properties":{"_id":{"description":"存储文档 ID，系统自动生成"},"content":{"title":"题目内容","bsonType":"string","description":"题目内容","trim":"both"},"answer_type":{"title":"答案格式","bsonType":"int","description":"答案格式","trim":"both"}},"version":"0.0.1"}

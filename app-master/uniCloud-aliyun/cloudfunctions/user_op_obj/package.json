@@ -1,0 +1,7 @@
+{
+  "name": "user_op_obj",
+  "dependencies": {},
+  "extensions": {
+    "uni-cloud-jql": {}
+  }
+}

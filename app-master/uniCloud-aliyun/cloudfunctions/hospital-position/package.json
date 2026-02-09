@@ -1,0 +1,7 @@
+{
+  "name": "hospital-position",
+  "dependencies": {},
+  "extensions": {
+    "uni-cloud-jql": {}
+  }
+}

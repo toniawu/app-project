@@ -1,0 +1,111 @@
+// 问题表
+{
+	"bsonType": "object",
+	"required": ["content","type","options","options2","surName","options3","options4","options5","title"],
+	"permission": {
+		"read": false,
+		"create": false,
+		"update": false,
+		"delete": false
+	},
+	"properties": {
+		"_id": {
+			"description": "ID，系统自动生成"
+		},
+		"survey_id":{
+			"title": "所属问卷ID",
+			"bsonType": "string",
+			"foreignKey": "Surveys._id"
+			
+		},
+		"title": {
+			"title": "问题标题",
+			"bsonType": "string"
+		},
+		"type":{
+			"bsonType": "string",
+			"title": "问题类型",
+			"enum": [
+				{
+					"text":"单选",
+					"value":"SINGLE"
+				},
+				{
+					"text":"多选",
+					"value":"MULTY"
+				}
+			]
+		},
+		"surName": {
+		    "bsonType": "string",
+		    "title": "关联问卷表",
+		    "foreignKey": "Surveys._id",
+		    "enum": {
+		        "collection": "Surveys",
+		        "field": "_id as value, title as text"
+		    }
+		},
+
+		"options": {
+		    "bsonType": "string",
+		    "title": "选项1",		
+		    "foreignKey": "Options._id",
+		    "enum": {
+		        "collection": "Options",
+		        "field": "_id as value, content as text"
+		    
+			}
+		},
+		"options2": {
+		    "bsonType": "string",
+		    "title": "选项2",		
+		    "foreignKey": "Options2._id",
+		    "enum": {
+		        "collection": "Options2",
+		        "field": "_id as value, content as text"
+		    
+			}
+		},
+		"options3": {
+		    "bsonType": "string",
+		    "title": "选项3",		
+		    "foreignKey": "Options3._id",
+		    "enum": {
+		        "collection": "Options3",
+		        "field": "_id as value, content as text"
+		    
+			}
+		},
+		"options4": {
+		    "bsonType": "string",
+		    "title": "选项4",		
+		    "foreignKey": "Options4._id",
+		    "enum": {
+		        "collection": "Options4",
+		        "field": "_id as value, content as text"
+		    
+			}
+		},
+		"options5": {
+		    "bsonType": "string",
+		    "title": "选项5",		
+		    "foreignKey": "Options5._id",
+		    "enum": {
+		        "collection": "Options5",
+		        "field": "_id as value, content as text"
+		    
+			}
+		},
+			
+		
+		"_creatTime":{
+			"title": "创建时间",
+			"bsonType": "timestamp",
+			"forceDefaultValue":{
+				"$env": "now"
+			}
+		}
+		
+		
+	}
+}

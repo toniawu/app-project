@@ -1,0 +1,81 @@
+// 文档教程: https://uniapp.dcloud.net.cn/uniCloud/schema
+{
+	"bsonType": "object",
+	"required": ["uid","score","nickname","anserTime","surveysId"],
+	"permission": {
+		"read": false,
+		"create": false,
+		"update": false,
+		"delete": false
+	},
+	"properties": {
+		"_id": {
+			"description": "ID，系统自动生成"
+		},
+		"uid": {
+			"title": "用户ID",
+			"bsonType": "string"
+		},
+		"nickname": {
+			"title": "用户昵称",
+			"bsonType": "string"
+		},
+		"score":{
+			"title": "分数",
+			"bsonType": "int"
+		},
+		"scoreList":{
+			"title": "分数记录",
+			"bsonType": "array",
+			"items": {
+				"bsonType": "object",
+				"questionId":{
+					"title": "问题ID",
+					"bsonType": "string"
+				},
+				"itemScore": {
+					"title": "分数",
+					"bsonType": "int"
+				}
+			}
+			
+		},
+		"answerList":{
+			"title": "答题记录",
+			"bsonType": "array",
+			"items": {
+				"bsonType": "object",
+				"properties": {
+					"questionId": {
+						"title": "问题ID",
+						"bsonType": "string"
+					},
+					"answer": {
+						"title": "答案",
+						"bsonType": "string"
+					}
+				}
+			}
+		
+			
+		},
+		"surveysId": {
+			"title": "问卷ID",
+			"bsonType": "string"
+		},
+		"anserTime":{
+			"title": "答题时间",
+			"bsonType": "timestamp"
+			
+		},
+		"_creatTime":{
+			"title": "创建时间",
+			"bsonType": "timestamp",
+			"forceDefaultValue":{
+				"$env": "now"
+			}
+		}
+		
+		
+	}
+}
